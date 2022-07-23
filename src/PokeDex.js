@@ -8,6 +8,15 @@ function PokeDex() {
   const [pokemons, setPokemons] = useState([]);
   const [pokemonDetail, setPokemonDetail] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  useEffect(()=>{
+    getposts();
+  },[]);
+  const getposts =()=>{
+    return axios
+    .get('https://pokeapi.co/api/v2/pokemon')
+    .then((res)=>setPokemons(res.data.results),setIsLoading(false))
+    .catch((err)=>console.error(err));
+  }
 
   const customStyles = {
     content: {
@@ -64,12 +73,16 @@ function PokeDex() {
           <>
             <h1>Welcome to pokedex !</h1>
             <b>Implement Pokedex list here</b>
+
+            {pokemons.map(i=>{
+              return(<li className="text-123" onClick={()=>setPokemonDetail(i)}>{i.name}</li>)
+            })}
           </>
         )}
       </header>
       {pokemonDetail && (
         <Modal
-          isOpen={pokemonDetail}
+          isOpen={true}
           contentLabel={pokemonDetail?.name || ""}
           onRequestClose={() => {
             setPokemonDetail(null);
